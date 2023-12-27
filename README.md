@@ -21,7 +21,7 @@ This utility is intended for use on **Windows 8 or greater**.
 
 4. Open a terminal inside the cloned directory.
 
-5. Run the command `python run.py` with administrative privileges if needed.
+5. Run the command `python run.py`.
 
 6. Once the process is complete, an Explorer window will open with the path to `pyinstaller.exe`. You can now use this custom PyInstaller to build binaries for your Python programs.
 
