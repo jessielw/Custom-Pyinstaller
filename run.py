@@ -155,6 +155,13 @@ def extract_pyinstaller():
     temp_folder.rmdir()
 
 
+def clean_dir(staring_dir):
+    shutil.rmtree(str(staring_dir / ".venv"), ignore_errors=False, onerror=onerror)
+    shutil.rmtree(
+        str(staring_dir / "pyinstaller"), ignore_errors=False, onerror=onerror
+    )
+
+
 def main():
     check_admin = is_admin()
     if not check_admin:
@@ -189,9 +196,19 @@ def main():
 
     os.chdir(starting_dir)
 
-    get_pyinstaller_path = Path.cwd() / ".venv" / "Scripts"
+    get_pyinstaller_path = Path.cwd() / ".venv" / "Scripts" / "pyinstaller.exe"
 
-    subprocess.run(["explorer", get_pyinstaller_path], shell=True)
+    if get_pyinstaller_path.exists():
+        output_path = starting_dir / "output"
+        if output_path.exists():
+            shutil.rmtree(str(output_path), ignore_errors=False, onerror=onerror)
+        output_path.mkdir()
+
+        shutil.move(str(get_pyinstaller_path), str(output_path / "pyinstaller.exe"))
+
+        subprocess.run(["explorer", output_path], check=True)
+
+    clean_dir(starting_dir)
 
 
 if __name__ == "__main__":
