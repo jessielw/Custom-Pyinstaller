@@ -206,7 +206,7 @@ def main():
 
         shutil.move(str(get_pyinstaller_path), str(output_path / "pyinstaller.exe"))
 
-        subprocess.run(["explorer", output_path], check=True)
+        subprocess.run(["explorer", str(output_path)])
 
     clean_dir(starting_dir)
 
