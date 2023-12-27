@@ -8,7 +8,7 @@ This utility is intended for use on **Windows 8 or greater**.
 
 ## System Requirements
 
-- Python (what ever is supported by pyinstaller at the time)
+- Python (what ever is supported by [pyinstaller](https://github.com/pyinstaller/pyinstaller) at the time)
 - Administrative privileges is required to run the scripts, however it will automatically elevate it for you.
 
 ## Usage
