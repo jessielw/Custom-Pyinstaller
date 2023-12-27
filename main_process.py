@@ -8,7 +8,31 @@ import tarfile
 starting_dir = Path.cwd()
 
 
+def onerror(func, path, exc_info):
+    """
+    Error handler for ``shutil.rmtree``.
+
+    If the error is due to an access error (read only file)
+    it attempts to add write permission and then retries.
+
+    If the error is for another reason it re-raises the error.
+
+    Usage : ``shutil.rmtree(path, onerror=onerror)``
+    """
+    import stat
+
+    # Is the error an access error?
+    if not os.access(path, os.W_OK):
+        os.chmod(path, stat.S_IWUSR)
+        func(path)
+    else:
+        raise
+
+
 def install_venv():
+    venv_path = Path(".venv")
+    if venv_path.exists():
+        shutil.rmtree(".venv", ignore_errors=False, onerror=onerror)
     subprocess.run(["python", "-m", "venv", ".venv"], check=True)
 
 
@@ -36,10 +60,11 @@ def check_chocolatey():
         return False
 
 
-def check_mingw():
+def check_mingw(echo_output: bool):
     try:
         subprocess.check_output(["gcc", "--version"])
-        print("MinGW-w64 is installed.")
+        if echo_output:
+            print("MinGW-w64 is installed.")
         return True
     except FileNotFoundError:
         print("MinGW-w64 is not installed.")
@@ -62,27 +87,6 @@ def check_git():
         return False
 
 
-def onerror(func, path, exc_info):
-    """
-    Error handler for ``shutil.rmtree``.
-
-    If the error is due to an access error (read only file)
-    it attempts to add write permission and then retries.
-
-    If the error is for another reason it re-raises the error.
-
-    Usage : ``shutil.rmtree(path, onerror=onerror)``
-    """
-    import stat
-
-    # Is the error an access error?
-    if not os.access(path, os.W_OK):
-        os.chmod(path, stat.S_IWUSR)
-        func(path)
-    else:
-        raise
-
-
 def clone_pyinstaller():
     pyinstaller_path = Path.cwd() / "pyinstaller"
     if pyinstaller_path.exists():
@@ -103,7 +107,7 @@ def clone_pyinstaller():
 
 
 def check_for_dependencies():
-    if not check_mingw():
+    if not check_mingw(True):
         choco_installed = check_chocolatey()
         if not choco_installed:
             print("You must install Chocolatey")
@@ -116,7 +120,7 @@ def check_for_dependencies():
             else:
                 subprocess.run(["choco", "install", "mingw"], check=True)
 
-    if check_mingw():
+    if check_mingw(False):
         if not check_git():
             print("You must install git")
             return False
