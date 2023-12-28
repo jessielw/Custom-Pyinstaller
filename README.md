@@ -2,7 +2,7 @@
 
 A set of scripts designed to streamline the process of downloading, creating a virtual environment, building, extracting, and installing PyInstaller to prevent false-positive virus detections.
 
-A `venv` is automatically created to build pyinstaller in the root of the project, so your python install is left untouched. This `venv` will automatically be removed after the job is completed.
+A `venv` is automatically created to build pyinstaller in the root of the project, so your python install is left untouched.
 
 This utility is intended for use on **Windows 8 or greater**.
 
@@ -23,7 +23,9 @@ This utility is intended for use on **Windows 8 or greater**.
 
 5. Run the command `python run.py`.
 
-6. Once the process is complete, an Explorer window will open with the path to `pyinstaller.exe`. You can now use this custom PyInstaller to build binaries for your Python programs.
+6. Once the process is complete, an Explorer window will open with the path to `custom_pyinstaller`.
+
+7. You can then use this custom pyinstaller to `poetry add --editable PATH_TO_custom_pyinstaller` or `pip install PATH_TO_custom_pyinstaller` to install in your current projects `venv`
 
 ## Reference
 
