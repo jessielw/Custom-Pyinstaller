@@ -25,7 +25,7 @@ This utility is intended for use on **Windows 8 or greater**.
 
 6. Once the process is complete, an Explorer window will open with the path to `custom_pyinstaller`.
 
-7. You can then use this custom pyinstaller to `poetry add --editable PATH_TO_custom_pyinstaller` or `pip install PATH_TO_custom_pyinstaller` to install in your current projects `venv`
+7. You can then use this custom pyinstaller to `poetry add --editable PATH_TO_custom_pyinstaller` or `pip install PATH_TO_custom_pyinstaller` to install in your current projects `venv`. *The path should be in the root of the custom_pyinstaller folder pointing towards setup.py*
 
 ## Reference
 
