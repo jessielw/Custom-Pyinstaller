@@ -137,7 +137,8 @@ def extract_pyinstaller():
         print("No .tar.gz files found in the directory.")
         return
 
-    tar_file = tar_files[0]  # Assuming there is only one .tar.gz file
+    # Assuming there is only one .tar.gz file
+    tar_file = tar_files[0]
 
     # Extract the content
     with tarfile.open(tar_file, "r:gz") as tar:
@@ -148,11 +149,13 @@ def extract_pyinstaller():
     # Find the extracted folder
     extracted_folder = next(temp_folder.iterdir())
 
-    # Rename the folder to 'pyinstaller'
-    extracted_folder.rename(Path.cwd() / "pyinstaller")
+    # Rename the folder to 'custom_pyinstaller'
+    pyinstaller_path = extracted_folder.rename(starting_dir / "custom_pyinstaller")
 
     # Optionally, remove the temporary folder
     temp_folder.rmdir()
+
+    return pyinstaller_path
 
 
 def clean_dir(staring_dir):
@@ -188,27 +191,14 @@ def main():
 
     subprocess.run(["cmd", "/c", "build_pyinstaller.bat"], check=True)
 
-    extract_pyinstaller()
+    custom_pyinstaller = extract_pyinstaller()
 
-    os.chdir(starting_dir)
+    if custom_pyinstaller.exists():
+        subprocess.run(["explorer", str(custom_pyinstaller.parent)])
 
-    subprocess.run(["cmd", "/c", "install_pyinstaller.bat"], check=True)
+        os.chdir(starting_dir)
 
-    os.chdir(starting_dir)
-
-    get_pyinstaller_path = Path.cwd() / ".venv" / "Scripts" / "pyinstaller.exe"
-
-    if get_pyinstaller_path.exists():
-        output_path = starting_dir / "output"
-        if output_path.exists():
-            shutil.rmtree(str(output_path), ignore_errors=False, onerror=onerror)
-        output_path.mkdir()
-
-        shutil.move(str(get_pyinstaller_path), str(output_path / "pyinstaller.exe"))
-
-        subprocess.run(["explorer", str(output_path)])
-
-    clean_dir(starting_dir)
+        clean_dir(starting_dir)
 
 
 if __name__ == "__main__":
